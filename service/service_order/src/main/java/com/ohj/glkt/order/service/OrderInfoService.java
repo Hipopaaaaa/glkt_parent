@@ -1,8 +1,12 @@
 package com.ohj.glkt.order.service;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ohj.ggkt.model.order.OrderInfo;
+import com.ohj.ggkt.vo.order.OrderInfoQueryVo;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -14,4 +18,5 @@ import com.ohj.ggkt.model.order.OrderInfo;
  */
 public interface OrderInfoService extends IService<OrderInfo> {
 
+   Page<OrderInfo> getPage(Long page, Long limit, OrderInfoQueryVo orderInfoQueryVo);
 }

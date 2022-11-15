@@ -1,7 +1,8 @@
 package com.ohj.glkt.order.mapper;
 
-import com.ohj.glkt.order.entity.OrderInfo;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ohj.ggkt.model.order.OrderInfo;
 
 /**
  * <p>

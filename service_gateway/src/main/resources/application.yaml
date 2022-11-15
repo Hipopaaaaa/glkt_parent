@@ -19,3 +19,8 @@ spring:
         uri: lb://service-vod
         predicates: Path=/*/vod/**
 
+      routes[1]:
+        id: service-order
+        uri: lb://service-order
+        predicates: Path=/*/order/**
+
