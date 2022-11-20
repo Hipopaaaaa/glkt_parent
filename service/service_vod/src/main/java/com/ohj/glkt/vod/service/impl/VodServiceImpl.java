@@ -1,6 +1,8 @@
 package com.ohj.glkt.vod.service.impl;
 
+import com.ohj.ggkt.model.vod.Video;
 import com.ohj.glkt.utils.exception.GlktException;
+import com.ohj.glkt.vod.service.VideoService;
 import com.ohj.glkt.vod.service.VodService;
 import com.ohj.glkt.vod.utils.ConstantPropertiesUtils;
 import com.qcloud.vod.VodUploadClient;
@@ -13,6 +15,8 @@ import com.tencentcloudapi.vod.v20180717.models.DeleteMediaRequest;
 import com.tencentcloudapi.vod.v20180717.models.DeleteMediaResponse;
 import jdk.nashorn.internal.objects.annotations.Where;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,11 +24,19 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Service
 @Slf4j
 public class VodServiceImpl implements VodService {
+    @Autowired
+    private VideoService videoService;
+
+    @Value("${tencent.video.appid}")
+    private String tencentVideoAppid;
     @Override
     public String uploadVideo(MultipartFile file) {
         //设置腾讯云的id和key
@@ -116,5 +128,19 @@ public class VodServiceImpl implements VodService {
         } catch (TencentCloudSDKException e) {
             throw new GlktException(20001,"删除视频失败");
         }
+    }
+
+    @Override
+    public Map<String, Object> getPlayAuth(Long courseId, Long videoId) {
+        //根据小节id获取到小节对象，获取腾讯云视频id
+        Video video = videoService.getById(videoId);
+        if(video==null){
+            throw  new GlktException(20001,"小节信息不存在");
+        }
+        Map<String,Object> map=new HashMap();
+        map.put("videoSourceId",video.getVideoSourceId());
+        map.put("appId",tencentVideoAppid);
+
+        return map;
     }
 }

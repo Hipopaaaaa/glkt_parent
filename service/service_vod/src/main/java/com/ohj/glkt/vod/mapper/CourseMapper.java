@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ohj.ggkt.model.vod.Course;
 import com.ohj.ggkt.vo.vod.CourseProgressVo;
 import com.ohj.ggkt.vo.vod.CoursePublishVo;
+import com.ohj.ggkt.vo.vod.CourseVo;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -19,4 +20,6 @@ import org.apache.ibatis.annotations.Param;
 public interface CourseMapper extends BaseMapper<Course> {
 
     CoursePublishVo selectCoursePublishVoById(Long id);
+
+    CourseVo selectCourseVoById(@Param("courseId") Long courseId);
 }

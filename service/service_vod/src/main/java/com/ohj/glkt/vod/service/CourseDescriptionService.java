@@ -15,4 +15,7 @@ import com.ohj.ggkt.model.vod.CourseDescription;
 public interface CourseDescriptionService extends IService<CourseDescription> {
 
     void removeByCourseId(Long id);
+
+    //根据课程id，获取详细信息
+    CourseDescription getByCourseId(Long courseId);
 }

@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ohj.ggkt.model.vod.Course;
 import com.ohj.ggkt.vo.vod.*;
 
+import java.util.Map;
+
 /**
  * <p>
  * 课程 服务类
@@ -29,4 +31,6 @@ public interface CourseService extends IService<Course> {
     boolean publishCourse(Long id);
 
     boolean removeByCourseId(Long id);
+
+    Map<String,Object> getCourseInfoByCourseId(Long courseId);
 }

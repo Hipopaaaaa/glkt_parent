@@ -14,4 +14,6 @@ import com.ohj.ggkt.model.activity.CouponUse;
  */
 public interface CouponUseService extends IService<CouponUse> {
 
+    //更新优惠卷的状态
+    boolean updateCouponInfoUseStatus(Long couponUseId, Long orderId);
 }

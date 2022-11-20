@@ -32,4 +32,12 @@ public class CourseDescriptionServiceImpl extends ServiceImpl<CourseDescriptionM
 
         courseDescriptionMapper.delete(courseDescriptionLambdaQueryWrapper);
     }
+
+    @Override
+    public CourseDescription getByCourseId(Long courseId) {
+        LambdaQueryWrapper<CourseDescription> courseDescriptionLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        courseDescriptionLambdaQueryWrapper.eq(courseId!=null,CourseDescription::getCourseId,courseId);
+
+        return courseDescriptionMapper.selectOne(courseDescriptionLambdaQueryWrapper);
+    }
 }

@@ -24,3 +24,17 @@ spring:
         uri: lb://service-order
         predicates: Path=/*/order/**
 
+      routes[2]:
+        id: service-user
+        uri: lb://service-user
+        predicates: Path=/*/user/**
+
+      routes[3]:
+        id: service-activity
+        uri: lb://service-activity
+        predicates: Path=/*/activity/**
+
+      routes[4]:
+        id: service-wechat
+        uri: lb://service-wechat
+        predicates: Path=/*/wechat/**

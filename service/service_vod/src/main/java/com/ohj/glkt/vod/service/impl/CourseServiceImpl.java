@@ -9,9 +9,7 @@ import com.ohj.ggkt.model.vod.Course;
 import com.ohj.ggkt.model.vod.CourseDescription;
 import com.ohj.ggkt.model.vod.Subject;
 import com.ohj.ggkt.model.vod.Teacher;
-import com.ohj.ggkt.vo.vod.CourseFormVo;
-import com.ohj.ggkt.vo.vod.CoursePublishVo;
-import com.ohj.ggkt.vo.vod.CourseQueryVo;
+import com.ohj.ggkt.vo.vod.*;
 import com.ohj.glkt.utils.copy.CopyUtil;
 import com.ohj.glkt.utils.exception.GlktException;
 
@@ -23,6 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -116,7 +117,7 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         //课程描述信息
         CourseDescription courseDescription = courseDescriptionService.getById(id);
         if(courseDescription==null){
-            return null;
+            return CopyUtil.copyBean(course, CourseFormVo.class);
         }
         //数据封装
         CourseFormVo courseFormVo = CopyUtil.copyBean(course, CourseFormVo.class);
@@ -204,6 +205,45 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         courseMapper.deleteById(id);
 
         return true;
+    }
+
+    @Override
+    public Map<String,Object> getCourseInfoByCourseId(Long courseId) {
+
+
+        //根据课程id查询课程基本信息
+        Course course = courseMapper.selectById(courseId);
+        if(course==null){
+            return null;
+        }
+        //对流量view_count进行+1
+        LambdaUpdateWrapper<Course> courseLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        courseLambdaUpdateWrapper.eq(courseId!=null,Course::getId,courseId)
+                .set(Course::getViewCount,course.getViewCount()+1);
+        courseMapper.update(null,courseLambdaUpdateWrapper);
+
+        //根据课程id查询课程详情数据
+        CourseVo courseVo =courseMapper.selectCourseVoById(courseId);
+
+        //根据课程id查询课程描述信息
+        CourseDescription courseDescription= courseDescriptionService.getByCourseId(courseId);
+
+        //根据课程id查询课程大纲
+        List<ChapterVo> chapterVoList = chapterService.getTreeList(courseId);
+
+
+        //根据课程id查询讲师
+        Teacher teacher = teacherService.getById(course.getTeacherId());
+
+        //数据封装
+        Map<String,Object> map=new HashMap<>();
+        map.put("courseVo",courseVo);
+        map.put("chapterVoList",chapterVoList);
+        map.put("description",courseDescription!=null?courseDescription.getDescription():"");
+        map.put("teacher",teacher);
+        //TODO 数据写死，后面需要完善
+        map.put("isBuy",false); //是否购买
+        return map;
     }
 
     private void getNameById(Course course) {
